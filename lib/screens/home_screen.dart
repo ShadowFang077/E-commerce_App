@@ -1,3 +1,4 @@
+import 'package:e_commerce_application/home/view/home_page.dart';
 import 'package:e_commerce_application/widgets/App_bar_for_all_screens.dart';
 
 import 'package:e_commerce_application/Drawer_for_app.dart';
@@ -5,8 +6,7 @@ import 'package:e_commerce_application/Drawer_for_app.dart';
 
 import 'package:e_commerce_application/prodcuts_screens/cart.dart';
 
-import 'package:e_commerce_application/screens/home.dart';
-
+ 
 import 'package:e_commerce_application/screens/orders.dart';
 
 import 'package:e_commerce_application/screens/settings.dart';
@@ -25,19 +25,19 @@ Future<bool> check() async {
 
 
 
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+class HomeNavBarScreen extends StatefulWidget {
+  const HomeNavBarScreen({super.key});
+  static Page<void> page() => const MaterialPage<void>(child: HomeNavBarScreen());
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  State<HomeNavBarScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _HomeScreenState extends State<HomeNavBarScreen> {
 
 int _selectedIndex = 0;
 final List<Widget> _screens = [
-  Home(),
-   
+  HomePage(),
   Wishlist(),
   Cart(),
   Orders(),

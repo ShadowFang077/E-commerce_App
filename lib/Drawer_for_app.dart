@@ -1,5 +1,7 @@
-import 'package:e_commerce_application/screens/splash_login.dart';
+import 'package:e_commerce_application/app/bloc/app_bloc.dart';
+import 'package:e_commerce_application/bin/splash_login.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class DrawerForApp extends StatefulWidget {
@@ -12,6 +14,9 @@ class DrawerForApp extends StatefulWidget {
 class _DrawerForAppState extends State<DrawerForApp> {
   @override
   Widget build(BuildContext context) {
+        final textTheme = Theme.of(context).textTheme;
+    final user = context.select((AppBloc bloc) => bloc.state.user);
+
     return 
      Drawer(
         child: Column(
@@ -25,6 +30,8 @@ class _DrawerForAppState extends State<DrawerForApp> {
                 SharedPreferences preferences =
                           await SharedPreferences.getInstance();
                     preferences.setBool('loggedin', false);
+                                  context.read<AppBloc>().add(const AppLogoutPressed());
+
               Navigator.push<void>(
                       context,
                       MaterialPageRoute<void>(

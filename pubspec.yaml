@@ -46,6 +46,16 @@ dependencies:
   path: ^1.9.0
   authentication_repository:
     path: packages/authentication_repository
+  bloc: ^9.0.0
+  equatable: ^2.0.0
+  flow_builder: ^0.1.0
+  flutter_bloc: ^9.1.0
+  font_awesome_flutter: ^10.1.0
+  form_inputs:
+    path: packages/form_inputs
+  formz: ^0.8.0
+  google_fonts: ^6.2.1
+  meta: ^1.7.0
 
 dev_dependencies:
   flutter_test:
@@ -58,6 +68,8 @@ dev_dependencies:
   # rules and activating additional ones.
   flutter_lints: ^5.0.0
   test: ^1.25.8
+  mocktail: ^1.0.0
+  bloc_test: ^10.0.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

@@ -27,16 +27,7 @@ class _SplashLoginState extends State<SplashLogin> {
               spacing: 10,
               children: [
                 SizedBox(height: 40),
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    'Welcome\n Back!',
-                    style: TextStyle(
-                        color: Color(0xff000000),
-                        fontWeight: FontWeight.bold,
-                        fontSize: 36),
-                  ),
-                ),
+              
                 SizedBox(height: 40),
                 SizedBox(
                   height: 85,
@@ -121,7 +112,7 @@ class _SplashLoginState extends State<SplashLogin> {
                          Navigator.push<void>(
                       context,
                       MaterialPageRoute<void>(
-                        builder: (BuildContext context) => HomeScreen(),
+                        builder: (BuildContext context) => HomeNavBarScreen(),
                       ),
                     );
                     }
@@ -206,15 +197,9 @@ class _SplashLoginState extends State<SplashLogin> {
                   children: [
                     Text(
                       'Create An Account',
-                      style: TextStyle(color: Color(0xff575757)),
                     ),
                     SizedBox(width: 5),
-                    Text('Sign Up',
-                        style: TextStyle(
-                          color: Color(0xffF83758),
-                          decoration: TextDecoration.underline,
-                          decorationColor: Color.fromARGB(255, 248, 55, 88),
-                        )),
+                 
                   ],
                 ),
               ],
