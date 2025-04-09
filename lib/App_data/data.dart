@@ -1,11 +1,12 @@
-  import 'package:demo_1/App_data/bottom,_card_Data.dart';
-import 'package:demo_1/App_data/product_model.dart';
-import 'package:demo_1/App_data/trending_products.dart';
+ 
 
 
 
+ import 'package:e_commerce_application/App_data/bottom,_card_Data.dart';
+import 'package:e_commerce_application/App_data/product_model.dart';
+import 'package:e_commerce_application/App_data/trending_products.dart';
 
- final bottomData =[
+final bottomData =[
 
     {
       'name': "Pilot's Watch",

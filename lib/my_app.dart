@@ -1,6 +1,6 @@
-import 'package:demo_1/home_screen.dart';
+import 'package:e_commerce_application/screens/home_screen.dart';
 
-import 'package:demo_1/splash_screen.dart';
+import 'package:e_commerce_application/screens/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

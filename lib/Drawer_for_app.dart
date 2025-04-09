@@ -1,4 +1,4 @@
-import 'package:demo_1/splash_login.dart';
+import 'package:e_commerce_application/screens/splash_login.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

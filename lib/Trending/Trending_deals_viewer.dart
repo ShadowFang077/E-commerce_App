@@ -1,6 +1,7 @@
-import 'package:demo_1/Trending/Trending_collections_screen.dart';
+import 'package:e_commerce_application/Trending/Trending_collections_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+
 
 class TrendingDeals extends StatelessWidget {
   const TrendingDeals({
