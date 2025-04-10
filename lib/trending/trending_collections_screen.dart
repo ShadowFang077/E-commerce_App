@@ -1,10 +1,13 @@
-import 'package:e_commerce_application/widgets/App_bar_for_all_screens.dart';
+import 'package:e_commerce_application/widgets/app_bar_for_all_screens.dart';
 import 'package:e_commerce_application/App_data/data.dart';
-import 'package:e_commerce_application/Drawer_for_app.dart';
-import 'package:e_commerce_application/Trending/Trending_cards.dart';
-import 'package:e_commerce_application/widgets/filter.dart';
+import 'package:e_commerce_application/drawer_for_app.dart';
+ import 'package:e_commerce_application/widgets/filter.dart';
 import 'package:e_commerce_application/screens/shop_page.dart';
 import 'package:flutter/material.dart';
+
+import 'trending_cards.dart';
+
+
 
 
 class TrendingCollectionsScreen extends StatefulWidget {
@@ -179,7 +182,7 @@ class _TrendingCollectionsScreenState extends State<TrendingCollectionsScreen> {
 // import 'package:e_commerce_application/filter.dart';
 // import 'package:flutter/material.dart';
 // import 'package:e_commerce_application/data.dart';
-// import 'package:e_commerce_application/Trending/Trending_cards.dart';
+// import 'package:e_commerce_application/Trending/trending_cards.dart';
 
 // class TrendingCollectionsScreen extends StatefulWidget {
 //   const TrendingCollectionsScreen({super.key});

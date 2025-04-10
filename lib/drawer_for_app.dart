@@ -1,5 +1,5 @@
 import 'package:e_commerce_application/app/bloc/app_bloc.dart';
-import 'package:e_commerce_application/bin/splash_login.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -32,12 +32,7 @@ class _DrawerForAppState extends State<DrawerForApp> {
                     preferences.setBool('loggedin', false);
                                   context.read<AppBloc>().add(const AppLogoutPressed());
 
-              Navigator.push<void>(
-                      context,
-                      MaterialPageRoute<void>(
-                        builder: (BuildContext context) => SplashLogin(),
-                      ),
-                    );
+
               },
               style: TextButton.styleFrom(
                     backgroundColor: Color(0xffF83758),

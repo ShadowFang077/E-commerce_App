@@ -1,10 +1,10 @@
-import 'package:e_commerce_application/prodcuts_screens/kids.dart';
-import 'package:e_commerce_application/prodcuts_screens/mens.dart';
-import 'package:e_commerce_application/prodcuts_screens/womens.dart';
-import 'package:flutter/material.dart';
 
-import 'package:e_commerce_application/prodcuts_screens/fashion.dart';
-import 'package:e_commerce_application/prodcuts_screens/beauty.dart';
+import 'package:e_commerce_application/products/beauty.dart';
+import 'package:e_commerce_application/products/fashion.dart';
+import 'package:e_commerce_application/products/kids.dart';
+import 'package:e_commerce_application/products/mens.dart';
+import 'package:e_commerce_application/products/womens.dart';
+import 'package:flutter/material.dart';
 
 class ContainerSlides extends StatelessWidget {
   const ContainerSlides({

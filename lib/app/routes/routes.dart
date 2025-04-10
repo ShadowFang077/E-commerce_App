@@ -1,7 +1,7 @@
 import 'package:e_commerce_application/app/bloc/app_bloc.dart';
-import 'package:e_commerce_application/home/view/home_page.dart';
+import 'package:e_commerce_application/home/view/pages/home_page.dart';
 import 'package:e_commerce_application/login/view/login_page.dart';
-import 'package:e_commerce_application/screens/home_screen.dart';
+import 'package:e_commerce_application/home/view/home_screen.dart';
 import 'package:flutter/widgets.dart';
  
 

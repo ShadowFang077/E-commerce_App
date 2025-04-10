@@ -1,4 +1,4 @@
-import 'package:e_commerce_application/screens/profile.dart';
+import 'package:e_commerce_application/home/view/pages/profile.dart';
 import 'package:flutter/material.dart';
 
 class AppBarForAllScreens extends StatefulWidget {

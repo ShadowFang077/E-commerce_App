@@ -2,7 +2,7 @@
 
 
 
- import 'package:e_commerce_application/App_data/bottom,_card_Data.dart';
+ import 'package:e_commerce_application/App_data/bottom_card_Data.dart';
 import 'package:e_commerce_application/App_data/product_model.dart';
 import 'package:e_commerce_application/App_data/trending_products.dart';
 

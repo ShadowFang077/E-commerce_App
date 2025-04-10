@@ -1,6 +1,6 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:e_commerce_application/App_data/data.dart';
-import 'package:e_commerce_application/screens/Cart_screens.dart';
+import 'package:e_commerce_application/home/view/pages/cart_screens.dart';
 import 'package:e_commerce_application/screens/buy_screen.dart';
 
 import 'package:flutter/material.dart';
