@@ -1,0 +1,2 @@
+/Users/lt-39/Developer/blocLearning/E-commerce_App/android/app/.cxx/Debug/453q3w2x/x86/CMakeFiles/edit_cache.dir
+/Users/lt-39/Developer/blocLearning/E-commerce_App/android/app/.cxx/Debug/453q3w2x/x86/CMakeFiles/rebuild_cache.dir

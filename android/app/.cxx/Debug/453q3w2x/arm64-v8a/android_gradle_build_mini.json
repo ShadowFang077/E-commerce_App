@@ -1,0 +1,20 @@
+{
+  "buildFiles": [
+    "/Users/lt-39/fvm/versions/stable/packages/flutter_tools/gradle/src/main/groovy/CMakeLists.txt"
+  ],
+  "cleanCommandsComponents": [
+    [
+      "/Users/lt-39/Library/Android/sdk/cmake/3.22.1/bin/ninja",
+      "-C",
+      "/Users/lt-39/Developer/blocLearning/E-commerce_App/android/app/.cxx/Debug/453q3w2x/arm64-v8a",
+      "clean"
+    ]
+  ],
+  "buildTargetsCommandComponents": [
+    "/Users/lt-39/Library/Android/sdk/cmake/3.22.1/bin/ninja",
+    "-C",
+    "/Users/lt-39/Developer/blocLearning/E-commerce_App/android/app/.cxx/Debug/453q3w2x/arm64-v8a",
+    "{LIST_OF_TARGETS_TO_BUILD}"
+  ],
+  "libraries": {}
+}

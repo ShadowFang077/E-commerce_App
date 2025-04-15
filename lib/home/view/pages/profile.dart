@@ -1,13 +1,14 @@
 import 'dart:io';
+
+import 'package:camera/camera.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:e_commerce_application/screens/camera_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:camera/camera.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as path;
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Profile extends StatefulWidget {
   final String name;
@@ -39,6 +40,7 @@ class _ProfileState extends State<Profile> {
     super.initState();
     loadCamera();
     loadImageFromPrefs();
+    loadUserDataAndInitializeControllers();
   }
 
   // Load camera
@@ -58,13 +60,31 @@ class _ProfileState extends State<Profile> {
   // Reusable method for loading user data from Firebase
   Future<Map<String, dynamic>> loadUserData() async {
     String userId = FirebaseAuth.instance.currentUser?.uid ?? 'default_user_id';
-    DocumentSnapshot snapshot = await FirebaseFirestore.instance.collection('users').doc(userId).get();
+    DocumentSnapshot snapshot =
+        await FirebaseFirestore.instance.collection('users').doc(userId).get();
 
     if (snapshot.exists) {
       return snapshot.data() as Map<String, dynamic>;
     } else {
       return {};
     }
+  }
+
+  // Load user data and initialize controllers
+  Future<void> loadUserDataAndInitializeControllers() async {
+    Map<String, dynamic> data = await loadUserData();
+    setState(() {
+      _emailController.text = data['_email_id'] ?? '';
+      _passwordController.text = data['_password'] ?? '';
+      _pincodeController.text = data['_pincode'] ?? '';
+      _AddressController.text = data['_address'] ?? '';
+      _cityController.text = data['_city'] ?? '';
+      _stateController.text = data['_state'] ?? '';
+      _countryController.text = data['_country'] ?? '';
+      _bankController.text = data['_bank_account_name'] ?? '';
+      _HoldernameController.text = data['_bank_account_no'] ?? '';
+      _IFSCodeController.text = data['_IFSC_code'] ?? '';
+    });
   }
 
   // Pick image from gallery or camera
@@ -129,10 +149,11 @@ class _ProfileState extends State<Profile> {
   }
 
   // Build image option widget
-  Widget _buildImageOption({required IconData icon, required String label, required VoidCallback onTap}) {
+  Widget _buildImageOption(
+      {required IconData icon, required String label, required VoidCallback onTap}) {
     return InkWell(
       onTap: onTap,
-      child: Container(
+      child: SizedBox(
         height: 90,
         width: 90,
         child: Column(
@@ -150,20 +171,19 @@ class _ProfileState extends State<Profile> {
     String userId = FirebaseAuth.instance.currentUser?.uid ?? 'default_user_id';
     try {
       await FirebaseFirestore.instance.collection('users').doc(userId).set(
-
-
-          {
-        '_email_id': _emailController.text,
-        '_password': _passwordController.text,
-        '_pincode': _pincodeController.text,
-        '_address': _AddressController.text,
-        '_city': _cityController.text,
-        '_state': _stateController.text,
-        '_country': _countryController.text,
-        '_bank_account_name': _bankController.text,
-        '_bank_account_no': _HoldernameController.text,
-        '_IFSC_code': _IFSCodeController.text,
-      }, );
+        {
+          '_email_id': _emailController.text,
+          '_password': _passwordController.text,
+          '_pincode': _pincodeController.text,
+          '_address': _AddressController.text,
+          '_city': _cityController.text,
+          '_state': _stateController.text,
+          '_country': _countryController.text,
+          '_bank_account_name': _bankController.text,
+          '_bank_account_no': _HoldernameController.text,
+          '_IFSC_code': _IFSCodeController.text,
+        },
+      );
       print("Profile updated");
     } catch (error) {
       print("Error updating profile: $error");
@@ -199,19 +219,21 @@ class _ProfileState extends State<Profile> {
                         height: 140,
                         width: 140,
                         child: _dataImage == null
-                            ? CircleAvatar(radius: 60, backgroundImage: AssetImage('assets/default_avatar.png'))
+                            ? CircleAvatar(
+                                radius: 60,
+                                backgroundImage: AssetImage('assets/default_avatar.png'))
                             : CircleAvatar(
-                          radius: 70,
-                          backgroundColor: Colors.tealAccent,
-                          child: ClipOval(
-                            child: Image.file(
-                              File(_dataImage!),
-                              fit: BoxFit.cover,
-                              width: 120,
-                              height: 120,
-                            ),
-                          ),
-                        ),
+                                radius: 70,
+                                backgroundColor: Colors.tealAccent,
+                                child: ClipOval(
+                                  child: Image.file(
+                                    File(_dataImage!),
+                                    fit: BoxFit.cover,
+                                    width: 120,
+                                    height: 120,
+                                  ),
+                                ),
+                              ),
                       ),
                       Padding(
                         padding: EdgeInsets.all(2),
@@ -233,27 +255,54 @@ class _ProfileState extends State<Profile> {
                   ),
                 ),
                 SectionTitle(title: 'Personal Details'),
-                CustomTextField(controller: _emailController, label: 'Email Address', initialValue: data['_email_id'] ?? null),
-                CustomTextField(controller: _passwordController, label: 'Password', initialValue: '', isPassword: true),
+                CustomTextField(
+                    controller: _emailController,
+                    label: 'Email Address',
+                    initialValue: data['_email_id']),
+                CustomTextField(
+                    controller: _passwordController,
+                    label: 'Password',
+                    initialValue: '',
+                    isPassword: true),
                 SizedBox(height: 20),
                 SectionTitle(title: 'Business Address Details'),
-                CustomTextField(controller: _pincodeController, label: 'Pincode', initialValue: data['_pincode'] ?? null),
-                CustomTextField(controller: _AddressController, label: 'Address', initialValue: data['_address'] ?? null),
-                CustomTextField(controller: _cityController, label: 'City', initialValue: data['_city'] ?? null),
-                CustomTextField(controller: _stateController, label: 'State', initialValue: data['_state'] ?? null),
-                CustomTextField(controller: _countryController, label: 'Country', initialValue: data['_country'] ?? null),
+                CustomTextField(
+                    controller: _pincodeController,
+                    label: 'Pincode',
+                    initialValue: data['_pincode']),
+                CustomTextField(
+                    controller: _AddressController,
+                    label: 'Address',
+                    initialValue: data['_address']),
+                CustomTextField(
+                    controller: _cityController, label: 'City', initialValue: data['_city']),
+                CustomTextField(
+                    controller: _stateController, label: 'State', initialValue: data['_state']),
+                CustomTextField(
+                    controller: _countryController,
+                    label: 'Country',
+                    initialValue: data['_country']),
                 SectionTitle(title: 'Bank Account Details'),
-                CustomTextField(controller: _bankController, label: 'Bank Account Number', initialValue: data['_bank_account_name'] ?? null),
-                CustomTextField(controller: _HoldernameController, label: 'Account Holder\'s Name', initialValue: data['_bank_account_no'] ?? null),
-                CustomTextField(controller: _IFSCodeController, label: 'IFSC Code', initialValue: data['_IFSC_code'] ?? null),
+                CustomTextField(
+                    controller: _bankController,
+                    label: 'Bank Account Number',
+                    initialValue: data['_bank_account_name']),
+                CustomTextField(
+                    controller: _HoldernameController,
+                    label: 'Account Holder\'s Name',
+                    initialValue: data['_bank_account_no']),
+                CustomTextField(
+                    controller: _IFSCodeController,
+                    label: 'IFSC Code',
+                    initialValue: data['_IFSC_code']),
                 SizedBox(height: 20),
                 SizedBox(
                   height: 52,
                   width: 327,
                   child: ElevatedButton(
                     onPressed: saveProfile,
-                    child: Text('Save', style: TextStyle(color: Colors.white)),
                     style: ElevatedButton.styleFrom(backgroundColor: Colors.blue),
+                    child: Text('Save', style: TextStyle(color: Colors.white)),
                   ),
                 ),
               ],
@@ -267,7 +316,7 @@ class _ProfileState extends State<Profile> {
 
 class SectionTitle extends StatelessWidget {
   final String title;
-  SectionTitle({required this.title});
+  const SectionTitle({super.key, required this.title});
 
   @override
   Widget build(BuildContext context) {
@@ -287,28 +336,35 @@ class CustomTextField extends StatelessWidget {
   final String initialValue;
   final bool isPassword;
 
-  CustomTextField({required this.controller, required this.label, required this.initialValue, this.isPassword = false});
+  const CustomTextField(
+      {super.key,
+      required this.controller,
+      required this.label,
+      required this.initialValue,
+      this.isPassword = false});
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 8.0),
-      child:  initialValue== null ?  TextFormField(
-        controller: controller,
-        obscureText: isPassword,
-        initialValue: initialValue,
-        decoration: InputDecoration(
-          labelText: label,
-          border: OutlineInputBorder(),
-        ),
-      ): TextFormField(
-         obscureText: isPassword,
-        initialValue: initialValue,
-        decoration: InputDecoration(
-          labelText: label,
-          border: OutlineInputBorder(),
-        ),
-      ),
+      child: initialValue == null
+          ? TextFormField(
+              controller: controller,
+              obscureText: isPassword,
+              initialValue: initialValue,
+              decoration: InputDecoration(
+                labelText: label,
+                border: OutlineInputBorder(),
+              ),
+            )
+          : TextFormField(
+              obscureText: isPassword,
+              initialValue: initialValue,
+              decoration: InputDecoration(
+                labelText: label,
+                border: OutlineInputBorder(),
+              ),
+            ),
     );
   }
 }
