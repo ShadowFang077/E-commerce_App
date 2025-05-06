@@ -10,6 +10,19 @@ class Beauty extends StatefulWidget {
 class _BeautyState extends State<Beauty> {
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return Scaffold(
+         appBar: AppBar(
+        title: const Text('Beauty'),
+      ),
+      body: const Center(
+        child: Text('Present no beauty products yet!',
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+            )),
+      ),
+    );
+    
+   
   }
 }

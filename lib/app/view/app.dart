@@ -1,7 +1,11 @@
 import 'package:authentication_repository/authentication_repository.dart';
+ import 'package:e_commerce_application/App_data/trending_products.dart';
 import 'package:e_commerce_application/app/bloc/app_bloc.dart';
 import 'package:e_commerce_application/app/routes/routes.dart';
-import 'package:flow_builder/flow_builder.dart';
+import 'package:e_commerce_application/app/view/firebasedataupload.dart';
+import 'package:e_commerce_application/data/data.dart';
+import 'package:e_commerce_application/data/jsondata.dart';
+ import 'package:flow_builder/flow_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -33,8 +37,14 @@ class App extends StatelessWidget {
 class AppView extends StatelessWidget {
   const AppView({super.key});
 
+
+
   @override
   Widget build(BuildContext context) {
+   wdata();
+   writedata();
+   readdata();
+       rdata();
     return MaterialApp(
       theme: ThemeData(
   textTheme: GoogleFonts.openSansTextTheme(),
@@ -61,51 +71,48 @@ class AppView extends StatelessWidget {
   }
 }
 
+ Future<void> wdata(
+  
+) async {
+  try {
+  addOrUpdateCarouselImages(
+   imgList:  imgList,
+    productId: 'productId',
+  );
+    print('Product added successfully!');
+  } catch (e) {
+    print('Error adding product: $e');
+  }
+}
+ 
 
-// import 'package:e_commerce_application/screens/home_screen.dart';
+rdata(){
+  getCarouselImages('productId').then((images) {
+    Data().carouselSliderImages = images;
+    print('Fetched images: $images');
+  }).catchError((error) {
+    print('Error fetching images: $error');
+  });
+}
 
-// import 'package:e_commerce_application/screens/splash_screen.dart';
-// import 'package:flutter/material.dart';
-// import 'package:shared_preferences/shared_preferences.dart';
+Future<void> writedata(
+) async {
+  try {
+  addOrUpdateProductData(
+   trendingJsonDatas: trendingJsonDatas.cast<Map<String, dynamic>>(),
+    productIds: 'productIds',
+  );
+    print('Product added successfully!');
+  } catch (e) {
+    print('Error adding product: $e');
+  }
+}
 
-
-
-// class MyApp extends StatelessWidget {
-//   const MyApp({super.key});
-
-//   Future<bool> check() async {
-//     SharedPreferences preferences = await SharedPreferences.getInstance();
-//   // await  Future.delayed(Duration(seconds: 5));
-//   // assert(false);
-//     return preferences.getBool('loggedin') ?? false;
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return MaterialApp(
-//       title: 'Flutter Demo',
-//       debugShowCheckedModeBanner: true,
-//       theme: ThemeData(
-//         colorScheme: ColorScheme.fromSeed(seedColor: Colors.blueAccent),
-//         useMaterial3: true,
-//       ),
-//       home: FutureBuilder<bool>(
-//         future: check(),
-//         builder: (context, snapshot) {
-//           if (snapshot.connectionState == ConnectionState.waiting) {
-//             // Show a loading spinner while waiting for the check
-//             return const Center(child: CircularProgressIndicator());
-//           } else if (snapshot.hasError) {
-//             // Handle error
-//             return Center(child: Text('Error: ${snapshot.error}'));
-//           } else {
-//             // Navigate based on the result of the check
-//             return snapshot.data == true
-//                 ? HomeScreen()
-//                 : const SplashScreen();
-//           }
-//         },
-//       ),
-//     );
-//   }
-// }
+readdata(){
+  getProductData('productIds').then((productImages) {
+    Data().trendingProduct = productImages.map((item) => TrendingProducts.fromJson(item)).toList();
+    print('Fetched images: $productImages');
+  }).catchError((error) {
+    print('Error fetching images: $error');
+  });
+}

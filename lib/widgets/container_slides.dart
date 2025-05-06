@@ -34,7 +34,7 @@ class ContainerSlides extends StatelessWidget {
                   CircleAvatar(
                     radius: 40,
                     backgroundImage:
-                        AssetImage('assets/Component 52.png'),
+                        NetworkImage('https://static.india.com/wp-content/uploads/2023/07/close-up-collection-make-up-beauty-products.jpg?impolicy=Medium_Widthonly&w=700'),
                   ),
                   Text('Beauty')
                 ],
@@ -54,7 +54,7 @@ class ContainerSlides extends StatelessWidget {
                   CircleAvatar(
                     radius: 40,
                     backgroundImage:
-                        AssetImage('assets/unsplash__3Q3tsJ01nc.png'),
+                       NetworkImage('https://images.unsplash.com/photo-1483985988355-763728e1935b?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')
                   ),
                   Text('Fashion')
                 ],
@@ -78,7 +78,7 @@ class ContainerSlides extends StatelessWidget {
                   CircleAvatar(
                     radius: 40,
                     backgroundImage:
-                        AssetImage('assets/unsplash_GCDjllzoKLo.png'),
+                        NetworkImage('https://images.unsplash.com/photo-1566454544259-f4b94c3d758c?q=80&w=2080&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'),
                   ),
                   Text('Kids')
                 ],
@@ -98,7 +98,7 @@ class ContainerSlides extends StatelessWidget {
                   CircleAvatar(
                     radius: 40,
                     backgroundImage:
-                        AssetImage('assets/Component 55.png'),
+                        NetworkImage('https://images.unsplash.com/photo-1608739872166-3ba1787f57e3?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')
                   ),
                   Text("Men's")
                 ],
@@ -122,7 +122,7 @@ class ContainerSlides extends StatelessWidget {
                   CircleAvatar(
                     radius: 40,
                     backgroundImage:
-                        AssetImage('assets/unsplash_OYYE4g-I5ZQ.png'),
+                        NetworkImage('https://plus.unsplash.com/premium_photo-1661351421471-b288544c3dda?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')
                   ),
                   Text("Women's"),
                 ],

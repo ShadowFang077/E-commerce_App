@@ -2,6 +2,8 @@ import 'dart:io';
 
 import 'package:camera/camera.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:e_commerce_application/home/widgets/customtextfield.dart';
+import 'package:e_commerce_application/home/widgets/titlesection.dart';
 import 'package:e_commerce_application/screens/camera_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -96,6 +98,7 @@ class _ProfileState extends State<Profile> {
       final savedImage = await File(pickedFile.path).copy('${appDir.path}/$fileName');
       SharedPreferences preferences = await SharedPreferences.getInstance();
       await preferences.setString('image', savedImage.path);
+      
       setState(() {
         _dataImage = savedImage.path;
       });
@@ -205,8 +208,7 @@ class _ProfileState extends State<Profile> {
             return Center(child: Text("Something went wrong"));
           }
 
-          Map<String, dynamic> data = snapshot.data ?? {};
-
+ 
           return Padding(
             padding: EdgeInsets.all(10.0),
             child: ListView(
@@ -258,43 +260,45 @@ class _ProfileState extends State<Profile> {
                 CustomTextField(
                     controller: _emailController,
                     label: 'Email Address',
-                    initialValue: data['_email_id']),
+                  ),
                 CustomTextField(
                     controller: _passwordController,
                     label: 'Password',
-                    initialValue: '',
-                    isPassword: true),
+                     isPassword: true),
                 SizedBox(height: 20),
                 SectionTitle(title: 'Business Address Details'),
                 CustomTextField(
                     controller: _pincodeController,
                     label: 'Pincode',
-                    initialValue: data['_pincode']),
+                     )
+                    ,
                 CustomTextField(
                     controller: _AddressController,
                     label: 'Address',
-                    initialValue: data['_address']),
+                     ),
                 CustomTextField(
-                    controller: _cityController, label: 'City', initialValue: data['_city']),
+                    controller: _cityController, label: 'City', 
+                     ),
                 CustomTextField(
-                    controller: _stateController, label: 'State', initialValue: data['_state']),
+                    controller: _stateController, label: 'State',
+                    ),
                 CustomTextField(
                     controller: _countryController,
                     label: 'Country',
-                    initialValue: data['_country']),
+                   ),
                 SectionTitle(title: 'Bank Account Details'),
                 CustomTextField(
                     controller: _bankController,
                     label: 'Bank Account Number',
-                    initialValue: data['_bank_account_name']),
+                   ),
                 CustomTextField(
                     controller: _HoldernameController,
                     label: 'Account Holder\'s Name',
-                    initialValue: data['_bank_account_no']),
+               ),
                 CustomTextField(
                     controller: _IFSCodeController,
                     label: 'IFSC Code',
-                    initialValue: data['_IFSC_code']),
+                 ),
                 SizedBox(height: 20),
                 SizedBox(
                   height: 52,
@@ -310,61 +314,6 @@ class _ProfileState extends State<Profile> {
           );
         },
       ),
-    );
-  }
-}
-
-class SectionTitle extends StatelessWidget {
-  final String title;
-  const SectionTitle({super.key, required this.title});
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.symmetric(vertical: 8.0),
-      child: Text(
-        title,
-        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-      ),
-    );
-  }
-}
-
-class CustomTextField extends StatelessWidget {
-  final TextEditingController controller;
-  final String label;
-  final String initialValue;
-  final bool isPassword;
-
-  const CustomTextField(
-      {super.key,
-      required this.controller,
-      required this.label,
-      required this.initialValue,
-      this.isPassword = false});
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.symmetric(vertical: 8.0),
-      child: initialValue == null
-          ? TextFormField(
-              controller: controller,
-              obscureText: isPassword,
-              initialValue: initialValue,
-              decoration: InputDecoration(
-                labelText: label,
-                border: OutlineInputBorder(),
-              ),
-            )
-          : TextFormField(
-              obscureText: isPassword,
-              initialValue: initialValue,
-              decoration: InputDecoration(
-                labelText: label,
-                border: OutlineInputBorder(),
-              ),
-            ),
     );
   }
 }

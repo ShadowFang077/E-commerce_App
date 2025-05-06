@@ -1,28 +1,22 @@
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:e_commerce_application/App_data/data.dart';
+import 'package:e_commerce_application/data/data.dart';
+import 'package:e_commerce_application/data/wishlist_provider.dart';
 import 'package:e_commerce_application/home/view/pages/cart_screens.dart';
+import 'package:e_commerce_application/models/product_model.dart';
 import 'package:e_commerce_application/screens/buy_screen.dart';
-
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:badges/badges.dart' as badges;
+
 
 
 
 class ShopPage extends StatefulWidget {
-    final List<String> itemImage;
-  final String itemName;
-  final String itemPrice;
-  final String itemDescription;
-  final String itemRating;
-  final String itemDiscount;
-  final String itemActualPrice;
-  const ShopPage({super.key,
-  required this.itemDescription,
-  required this.itemImage,
-  required this.itemName,
-  required this.itemPrice,
-  required this.itemRating,
-   required this.itemActualPrice,
-      required this.itemDiscount });
+  final Product product;
+
+    ShopPage({super.key,
+  required this.product,
+       });
 
   @override
   State<ShopPage> createState() => _ShopPageState();
@@ -31,25 +25,16 @@ class ShopPage extends StatefulWidget {
 class _ShopPageState extends State<ShopPage> 
 with SingleTickerProviderStateMixin {
 
-
+ 
 int _currentIndex = 1;
 
 final CarouselSliderController _controller = CarouselSliderController();
 
-  // List<Widget> selectedItemsImage = widget.itemImage.map((trendingProducts) => Container(
-  //   margin: EdgeInsets.all(5.0),
-  //   child: Image.asset(
-  //     trendingProducts,
-  //     fit: BoxFit.fill,
-  //   ))).toList();
-
-final String data = productDetails[0]['details'] ?? 'no data' ;
+final String data =Data(). productDetails[0]['details'] ?? 'no data' ;
     
     late AnimationController _animationcontroller;
     late Animation<double> _scaleAnimation;
-    bool _isHeartRed = false;
-    // double _size= 30;
-
+    
 bool _isExpanded = false;
 
 @override 
@@ -57,7 +42,7 @@ void initState(){
   super.initState();
   _animationcontroller = AnimationController(
     duration: const Duration(milliseconds: 300),
-    vsync: this,);
+    vsync: this,); 
 
  _scaleAnimation = Tween<double>(begin: 1.0, end: 1.5).animate(
   CurvedAnimation(parent: _animationcontroller, curve: Curves.easeInOut),
@@ -80,15 +65,27 @@ void initState(){
 
   @override
   Widget build(BuildContext context) {
+     final wishlistProvider = Provider.of<WishlistProvider>(context);
+    final product = Product(
+      name: widget.product.name,
+      description: widget.product.description,
+      image: widget.product.image,
+      itemPrice: widget.product.itemPrice,
+      ratingNumber: widget.product.ratingNumber,
+      actualPrice: widget.product.actualPrice,
+      discount: widget.product.discount,
+      isWishlisted: widget.product.isWishlisted,
+    );
+
+    final isWishlisted = wishlistProvider.isInWishlist(product);
+
     return Scaffold(
       appBar: AppBar(
         title: Row(
           children: [
             SizedBox(
               height: 42,
-              width: 230,
-              // height: MediaQuery.of(context).size.height-80,
-              // width: MediaQuery.of(context).size.width-130,
+              width: 220,
               child: TextField(
                 decoration: InputDecoration(
                   border: OutlineInputBorder(
@@ -101,11 +98,42 @@ void initState(){
                 ),
               ),
             ),
-            SizedBox(width: 15),
-            Icon(Icons.shopping_cart_outlined),
-          ],
-        ),
+            SizedBox(width: 0),
+           Stack(
+            alignment: Alignment.topRight,
+            children: [
+              IconButton(
+                icon: Icon(Icons.shopping_cart_outlined),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => CartScreens()),
+                  );
+                },
+              ),
+              FutureBuilder<int>(
+                future: Data().getCartItemCount(), // Fetch cart count
+                builder: (context, snapshot) {
+                  if (snapshot.hasData && snapshot.data! > 0) {
+                    return badges.Badge(
+                      badgeContent: Text(
+                        snapshot.data.toString(),
+                        style: TextStyle(color: Colors.white, fontSize: 12),
+                      ),
+                      badgeStyle: badges.BadgeStyle(
+                        badgeColor: Colors.red,
+                      ),
+                      position: badges.BadgePosition.topEnd(top: -5, end: -5),
+                    );
+                  }
+                  return SizedBox(); // Show nothing if cart is empty
+                },
+              ),
+            ],
+          ),
+        ],
       ),
+    ),
       body: SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child: Padding(
@@ -117,12 +145,14 @@ void initState(){
                 children: [
                   Container(
                 child:  CarouselSlider(
-                  items:widget.itemImage.map((trendingProducts) => Container(
+               items: [
+                 Container(
                     margin: EdgeInsets.all(5.0),
-                    child: Image.asset(
-                      trendingProducts,
+                    child: Image.network(
+                      widget.product.image[0],
                       fit: BoxFit.fill,
-                    ))).toList(),
+                    ))
+               ],
                   carouselController: _controller,
                   options: CarouselOptions(
                       height: 335,
@@ -135,64 +165,87 @@ void initState(){
                         setState(() {
                           _currentIndex = index;
                         });
-                      }),
-                ),
-                  ),
-                  GestureDetector(
-                    onTap: (){
-                     setState(() {
-                       if (!_isHeartRed){
-                        _animationcontroller.forward();
-                       }
-                       _isHeartRed =!_isHeartRed;
-                     });
-                    },
-                    child: AnimatedBuilder(animation: _scaleAnimation, builder: (context, child){
-                      return Transform.scale(
-                        scale: _isHeartRed ? _scaleAnimation.value:1.0,
-                      child: Icon(_isHeartRed ? Icons.favorite : Icons.favorite_border_outlined, color: _isHeartRed ? Colors.red: Colors.black ,size: 30
+                      }
                       ),
-                    );
-                    },
+                      
+                
+                // Row(
+                //   mainAxisAlignment: MainAxisAlignment.center,
+                //   children: List.generate(
+                //     3, // Replace with the number of items in the carousel
+                //     (index) => Container(
+                //       width: 8.0,
+                //       height: 8.0,
+                //       margin: EdgeInsets.symmetric(horizontal: 4.0),
+                //       decoration: BoxDecoration(
+                //         shape: BoxShape.circle,
+                //         color: _currentIndex == index
+                //             ? Colors.pink
+                //             : Colors.grey,
+                //       ),
+                //     ),
+                //   ),
+                // ),
                   ),
                   ),
+                  Positioned(
+                    top: 5,
+                    right: 5,
+                    child: IconButton(
+                      icon: Icon(
+                        isWishlisted ? Icons.favorite : Icons.favorite_border,
+                        color: isWishlisted ? Colors.red : Colors.grey,
+                      ),
+                      onPressed: () {
+                        if (isWishlisted) {
+                          wishlistProvider.removeProduct(product);
+                        } else {
+                          wishlistProvider.addProduct(product);
+                        }
+                      },
+                    ),
+                  ),
+                  // GestureDetector(
+                  //   onTap: (){
+                  //     print('product is wishlisted ${widget.product.isWishlisted}');
+                  //    setState(() {
+                  //      if ( widget.product.isWishlisted){
+                  //       _animationcontroller.forward();
+                  //      }
+                  //     widget.product.isWishlisted = !widget.product.isWishlisted;
+                  //     Data().addProductToWishlist(
+                  //       widget.product,
+                  //     );
+                  //     print('product is wishlisted ${widget.product.isWishlisted}');
+                  //    });
+                  //   },
+                  //   child: AnimatedBuilder(animation: _scaleAnimation, builder: (context, child){
+                  //     return Transform.scale(
+                  //       scale:  widget.product.isWishlisted  ? _scaleAnimation.value:1.0,
+                  //     child: Icon( widget.product.isWishlisted  ? Icons.favorite : Icons.favorite_border_outlined, color:  widget.product.isWishlisted  ? Colors.red: Colors.black ,size: 30
+                  //     ),
+                  //   );
+                  //   },
+                  // ),
+                  // ),
                 ]
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: widget.itemImage.asMap().entries.map((entry) {
-                  return GestureDetector(
-                    onTap: () => _controller.animateToPage(entry.key),
-                    child: Container(
-                      width: 12.0,
-                      height: 10.0,
-                      margin:
-                          EdgeInsets.symmetric(vertical: 8.0, horizontal: 4.0),
-                      decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: _currentIndex == entry.key
-                              ? Color(0xffF83758)
-                              : Color(0xffC4C4C4)),
-                    ),
-                  );
-                }).toList(),
-              ),
+           
               SizedBox(height: 20),
               Align(
                   alignment: Alignment.topLeft,
                   child: Text(
-                   widget. itemName,
+                   widget.product.name ,
                     style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
                         color: Color(0Xff000000)),
                   )),
               SizedBox(height: 0),
-              //item name
               Align(
                   alignment: Alignment.topLeft,
                   child: Text(
-                      widget. itemDescription )), //item preference
+                      widget.product.description  )),
               SizedBox(height: 7),
               Row(
                 children: [
@@ -208,7 +261,7 @@ void initState(){
                       color: Colors.grey, size: 20),
                   SizedBox(width: 5),
                   Text(
-                    widget.itemRating,
+                    widget.product.ratingNumber,
                     style: TextStyle(color: Color(0xff828282), fontSize: 16),
                   )
                 ],
@@ -217,7 +270,7 @@ void initState(){
               Row(
                 children: [
                   Text(
-                    widget.itemActualPrice,
+                    widget.product.actualPrice,
                     style: TextStyle(
                         fontSize: 14,
                         decoration: TextDecoration.lineThrough,
@@ -225,12 +278,12 @@ void initState(){
                   ),
                   SizedBox(width: 8),
                   Text(
-                    widget.itemPrice,
+                    widget.product.itemPrice,
                     style: TextStyle(fontSize: 14),
                   ),
                   SizedBox(width: 8),
                   Text(
-                    widget.itemDiscount,
+                    widget.product.discount,
                     style: TextStyle(fontSize: 14, color: Color(0xffFA7189)),
                   )
                 ],
@@ -247,14 +300,14 @@ void initState(){
                 _isExpanded
                     ? data
                     : data.length > 300
-                        ? data.substring(10, 285) + '...' // Show truncated text
+                        ? data.substring(10, 285) + '...' 
                         : data,
                 textAlign: TextAlign.start,
                 overflow: TextOverflow.ellipsis,
                 softWrap: _isExpanded,
                 maxLines: _isExpanded
                     ? null
-                    : 5, // Max 4 lines when collapsed, no limit when expanded
+                    : 5, 
                 style: TextStyle(fontSize: 12),
               ),
               Align(
@@ -263,7 +316,7 @@ void initState(){
                   onTap: () {
                     setState(() {
                       _isExpanded =
-                          !_isExpanded; // Expand the text when "More" is clicked
+                          !_isExpanded; 
                     });
                   },
                   child: Text(_isExpanded ? "Show more" : 'Show less',
@@ -328,57 +381,79 @@ void initState(){
                 ],
               ),
               SizedBox(height: 10),
-              SizedBox(width: 0),
+              SizedBox(height: 10), // Fixed incorrect argument usage
               Row(
                 children: [
                   Stack(
-                    alignment: Alignment.centerLeft,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(left:  10.0),
-                        child: Container(
-                          decoration: BoxDecoration(
-                              gradient: LinearGradient(
-                                colors: [Color(0xff3F92FF), Color(0xff0B3689)],
-                                begin: Alignment.center,
-                                end: Alignment.centerLeft,
-                              ),
-                              borderRadius: BorderRadius.circular(15)),
-                          child: TextButton(
-                              onPressed: () {
-                                Navigator.push(context, MaterialPageRoute(builder: (context) => CartScreens()));
-                              },
-                              style: TextButton.styleFrom(
-                                minimumSize: Size(130, 40),
-                                alignment: Alignment.centerRight
-                              ),
-                              child: Text(
-                                'Go to cart',
-                                 style: TextStyle(color: Color(0xffFFFFFF)),
-                              )),
-                        ),
-                      ),
-                      Container(
-                        decoration: BoxDecoration(
-                            gradient: LinearGradient(
-                              colors: [Color(0xff3F92FF), Color(0xff0B3689)],
-                              begin: Alignment.topCenter,
-                              end: Alignment.centerLeft,
-                            ),
-                            borderRadius: BorderRadius.circular(35)),
-                        child: TextButton(
-                            onPressed: () {
-                              Navigator.push(context, MaterialPageRoute(builder: (context) => CartScreens  ()));
-                            },
-                            style: TextButton.styleFrom(minimumSize: Size(36, 40)),
-                            child: Icon(
-                              Icons.shopping_cart,
-                              color: Color(0xffFFFFFF),
-                            )),
-                      )
-                  
-                    ],
-                  ),
+      alignment: Alignment.centerLeft,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(left: 10.0),
+          child: Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [Color(0xff3F92FF), Color(0xff0B3689)],
+                begin: Alignment.center,
+                end: Alignment.centerLeft,
+              ),
+              borderRadius: BorderRadius.circular(15),
+            ),
+            child: TextButton(
+              onPressed: () {
+                if (!widget.product.isCartlisted) {
+                  setState(() {
+                    widget.product.isCartlisted = true;
+                    print('Product added to cart: ${widget.product.name}');
+                   Data().addProductToCart(
+                        widget.product,
+                      );
+                      print('product is wishlisted ${widget.product.isWishlisted}');
+                     
+                  });
+                } else {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => CartScreens()),
+                  );
+                }
+              },
+              style: TextButton.styleFrom(
+                minimumSize: Size(130, 40),
+                alignment: Alignment.centerRight,
+              ),
+              child: Text(
+                 widget.product.isCartlisted ? 'Go to cart' : 'Add to cart',
+                style: TextStyle(color: Color(0xffFFFFFF)),
+              ),
+            ),
+          ),
+        ),
+        Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [Color(0xff3F92FF), Color(0xff0B3689)],
+              begin: Alignment.topCenter,
+              end: Alignment.centerLeft,
+            ),
+            borderRadius: BorderRadius.circular(35),
+          ),
+          child: TextButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => CartScreens()),
+              );
+            },
+            style: TextButton.styleFrom(minimumSize: Size(36, 40)),
+            child: Icon(
+              Icons.shopping_cart,
+              color: Color(0xffFFFFFF),
+            ),
+          ),
+        )
+      ],
+    )
+,
                 SizedBox(width: 20),
                 Stack(
                   alignment: Alignment.centerLeft,

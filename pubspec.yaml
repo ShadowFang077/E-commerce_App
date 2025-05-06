@@ -49,7 +49,7 @@ dependencies:
   bloc: ^9.0.0
   equatable: ^2.0.0
   flow_builder: ^0.1.0
-  flutter_bloc: ^9.1.0
+  flutter_bloc: ^9.1.1
   font_awesome_flutter: ^10.1.0
   form_inputs:
     path: packages/form_inputs
@@ -58,6 +58,10 @@ dependencies:
   meta: ^1.7.0
   cloud_firestore: ^5.6.6
   firebase_auth: ^5.5.2
+  fluttertoast: ^8.2.12
+  provider: ^6.0.5
+  badges: ^3.1.1
+  standard_searchbar: ^2.1.1
 
 dev_dependencies:
   flutter_test:

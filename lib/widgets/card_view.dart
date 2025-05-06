@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../data/wishlist_provider.dart';
+import '../models/product_model.dart';
 
 class ItemCard extends StatefulWidget {
   final String itemImage;
@@ -25,27 +28,61 @@ class ItemCard extends StatefulWidget {
 class _ItemCardState extends State<ItemCard> {
   @override
   Widget build(BuildContext context) {
+    final wishlistProvider = Provider.of<WishlistProvider>(context);
+    final product = Product(
+      name: widget.itemName,
+      description: widget.itemDescription,
+      image: [widget.itemImage],
+      itemPrice: widget.itemPrice,
+      ratingNumber: widget.itemRating,
+      actualPrice: widget.actualPrice,
+      discount: widget.discountPrice,
+    );
+
+    final isWishlisted = wishlistProvider.isInWishlist(product);
+
     return Card(
       color: Colors.white,
       child: SizedBox(
         height: 241,
         width: 170,
         child: Padding(
-          padding: EdgeInsets.all(02.0),
+          padding: EdgeInsets.all(2.0),
           child: Column(
             children: [
-              Container(
-                  height: 124,
-                  width: 170,
-                  decoration: BoxDecoration(
+              Stack(
+                children: [
+                  Container(
+                    height: 124,
+                    width: 170,
+                    decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(5),
                       image: DecorationImage(
-                        image: AssetImage(widget.itemImage),
+                        image: NetworkImage(widget.itemImage),
                         fit: BoxFit.cover,
-                      ))),
-              const SizedBox(
-                height: 2,
+                      ),
+                    ),
+                  ),
+                  Positioned(
+                    top: 5,
+                    right: 5,
+                    child: IconButton(
+                      icon: Icon(
+                        isWishlisted ? Icons.favorite : Icons.favorite_border,
+                        color: isWishlisted ? Colors.red : Colors.grey,
+                      ),
+                      onPressed: () {
+                        if (isWishlisted) {
+                          wishlistProvider.removeProduct(product);
+                        } else {
+                          wishlistProvider.addProduct(product);
+                        }
+                      },
+                    ),
+                  ),
+                ],
               ),
+              const SizedBox(height: 2),
               Text(widget.itemName, style: TextStyle(fontSize: 12)),
               SizedBox(height: 3),
               Text(
@@ -67,16 +104,17 @@ class _ItemCardState extends State<ItemCard> {
                     child: Text(
                       widget.actualPrice,
                       style: TextStyle(
-                          fontSize: 12,
-                          decoration: TextDecoration.lineThrough,
-                          color: Color(0xffBBBBBB)),
+                        fontSize: 12,
+                        decoration: TextDecoration.lineThrough,
+                        color: Color(0xffBBBBBB),
+                      ),
                     ),
                   ),
                   SizedBox(width: 3),
                   Text(
                     widget.discountPrice,
                     style: TextStyle(color: Color(0xffFE735C), fontSize: 10),
-                  )
+                  ),
                 ],
               ),
               Row(
@@ -87,7 +125,7 @@ class _ItemCardState extends State<ItemCard> {
                   Icon(Icons.star_half, color: Color(0xffEDB310)),
                   Icon(Icons.star_outline_outlined, color: Colors.grey),
                 ],
-              )
+              ),
             ],
           ),
         ),

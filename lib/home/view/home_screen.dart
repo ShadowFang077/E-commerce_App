@@ -1,9 +1,9 @@
+import 'package:e_commerce_application/home/view/pages/cart_screens.dart';
 import 'package:e_commerce_application/home/view/pages/home_page.dart';
 import 'package:e_commerce_application/widgets/app_bar_for_all_screens.dart';
 
 import 'package:e_commerce_application/drawer_for_app.dart';
 
-import 'package:e_commerce_application/features/products/cart.dart';
 import 'package:e_commerce_application/screens/orders.dart';
 
 import 'package:e_commerce_application/home/view/pages/settings.dart';
@@ -33,8 +33,8 @@ class _HomeScreenState extends State<HomeNavBarScreen> {
   final List<Widget> _screens = [
     HomePage(),
     Wishlist(),
-    Cart(),
-    Orders(),
+    CartScreens(),
+     Orders(),
     Settings(),
   ];
 
@@ -42,11 +42,7 @@ class _HomeScreenState extends State<HomeNavBarScreen> {
     setState(() {
       _selectedIndex = index;
     });
-
-    // Navigator.push(
-    //   context,
-    //   MaterialPageRoute(builder: (context) => _screens[index]),
-    // );
+ 
   }
 
   @override

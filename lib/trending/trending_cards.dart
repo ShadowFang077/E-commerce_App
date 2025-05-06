@@ -40,8 +40,8 @@ class _TrendingCardsState extends State<TrendingCards> {
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(5),
                       image: DecorationImage(
-                        image: AssetImage(widget.itemImage[0]),
-                        fit: BoxFit.scaleDown,
+                        image: NetworkImage(widget.itemImage[0]),
+                        fit: BoxFit.values[1],
                       ))),
               const SizedBox(
                 height: 2,

@@ -1,31 +1,18 @@
 import 'package:carousel_slider/carousel_slider.dart';
+ import 'package:e_commerce_application/data/data.dart';
 import 'package:e_commerce_application/models/product_model.dart';
-import 'package:e_commerce_application/data/products_data.dart';
-import 'package:e_commerce_application/features/trending/trending_deals_viewer.dart';
+ import 'package:e_commerce_application/features/trending/trending_deals_viewer.dart';
 import 'package:e_commerce_application/features/products/deal_viewall.dart' show DealViewer;
 import 'package:e_commerce_application/screens/shop_page.dart';
 import 'package:e_commerce_application/widgets/container_slides.dart';
 import 'package:e_commerce_application/widgets/all_features.dart';
 import 'package:e_commerce_application/widgets/card_view.dart';
-import 'package:e_commerce_application/widgets/filter.dart';
-import 'package:e_commerce_application/widgets/home_page_bottom_card_view.dart';
+ import 'package:e_commerce_application/widgets/home_page_bottom_card_view.dart';
 import 'package:flutter/material.dart';
 
-final List<String> imgList = [
-  'assets/Mask Group.png',
-  'assets/Masks Group.png',
-  'assets/mac.png',
-  'assets/Group 33726.png',
-];
 
-final List<Widget> imageSliders = imgList
-    .map((item) => Container(
-        margin: EdgeInsets.all(5.0),
-        child: Image.asset(
-          item,
-          fit: BoxFit.fill,
-        )))
-    .toList();
+
+
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -39,6 +26,20 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final CarouselSliderController _controller = CarouselSliderController();
   int _current = 1;
+  Data data = Data();
+ 
+  // List<Widget> imageSliders =  data.carouselSliderImages
+  //   .map((item) => Container(
+  //       margin: EdgeInsets.all(5.0),
+  //       child: Image.network(
+  //         item,
+  //         fit: BoxFit.fill,
+  //       )))
+  //   .toList();
+
+// write data function  
+ 
+
 
   @override
   Widget build(BuildContext context) {
@@ -76,6 +77,7 @@ class _HomePageState extends State<HomePage> {
                       child: all_features(),
                     ),
                     SizedBox(width: 79),
+                   
                     Padding(
                       padding: EdgeInsets.all(10),
                       child: Container(
@@ -104,10 +106,10 @@ class _HomePageState extends State<HomePage> {
                         ),
                         child: InkWell(
                           onTap: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => Filter()));
+                            // Navigator.push(
+                            //     context,
+                            //     MaterialPageRoute(
+                            //         builder: (context) => Filter()));
                           },
                           child: Row(
                             children: [
@@ -124,7 +126,15 @@ class _HomePageState extends State<HomePage> {
                   ContainerSlides(),
                   SizedBox(height: 10),
                   CarouselSlider(
-                    items: imageSliders,
+                    items: 
+                     data.carouselSliderImages
+    .map((item) => Container(
+        margin: EdgeInsets.all(5.0),
+        child: Image.network(
+          item,
+          fit: BoxFit.fill,
+        )))
+    .toList(),
                     carouselController: _controller,
                     options: CarouselOptions(
                         height: 190,
@@ -141,7 +151,7 @@ class _HomePageState extends State<HomePage> {
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: imgList.asMap().entries.map((entry) {
+                    children:  data.carouselSliderImages.asMap().entries.map((entry) {
                       return GestureDetector(
                         onTap: () => _controller.animateToPage(entry.key),
                         child: Container(
@@ -164,32 +174,34 @@ class _HomePageState extends State<HomePage> {
                     }).toList(),
                   ),
                   SizedBox(height: 10),
-                  DealViewer(products: products),
+                 DealViewer(products: data.products),
                   SizedBox(height: 20),
                   Container(
                     height: 262,
                     child: ListView.builder(
                       scrollDirection: Axis.horizontal,
-                      itemCount: products.length,
+                      itemCount:data. products.length,
                       itemBuilder: (context, index) {
-                        Product item = products[index];
+                        Product item =data. products[index];
                         return GestureDetector(
                           onTap: () {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) => ShopPage(
-                                          itemDescription:
-                                              products[index].description,
-                                          itemImage: [products[index].image],
-                                          itemPrice: products[index].itemPrice,
-                                          itemName: products[index].name,
-                                          itemRating:
-                                              products[index].ratingNumber,
-                                          itemActualPrice:
-                                              products[index].actualPrice,
-                                          itemDiscount:
-                                              products[index].discount,
+
+                                      product:  data.products[index],
+                                          // itemDescription:
+                                          //    data. products[index].description,
+                                          // itemImage: [data.products[index].image],
+                                          // itemPrice:data. products[index].itemPrice,
+                                          // itemName:data. products[index].name,
+                                          // itemRating:
+                                          //    data. products[index].ratingNumber,
+                                          // itemActualPrice:
+                                          //   data.  products[index].actualPrice,
+                                          // itemDiscount:
+                                          //   data.  products[index].discount,
                                         )));
                           },
                           child: ItemCard(
@@ -197,7 +209,7 @@ class _HomePageState extends State<HomePage> {
                             itemName: item.name,
                             discountPrice: item.discount,
                             itemDescription: item.description,
-                            itemImage: item.image,
+                            itemImage: item.image.isNotEmpty ? item.image[0] : '',
                             itemPrice: item.itemPrice,
                             actualPrice: item.actualPrice,
                           ),
@@ -253,34 +265,37 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
                   SizedBox(height: 10),
-                  TrendingDeals(products: products),
+                  TrendingDeals(products:data. products),
                   SizedBox(height: 15),
                   Container(
                     height: 250,
                     child: ListView.builder(
                       scrollDirection: Axis.horizontal,
-                      itemCount: products.length,
+                      itemCount:data. products.length,
                       itemBuilder: (context, index) {
-                        Product item = products[index];
+                        Product item =data. products[index];
                         return InkWell(
                           onTap: () {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) => ShopPage(
-                                        itemDescription: item.description,
-                                        itemImage: [item.image],
-                                        itemPrice: item.itemPrice,
-                                        itemName: item.name,
-                                        itemRating: item.ratingNumber,
-                                        itemActualPrice: item.actualPrice,
-                                        itemDiscount: item.discount)));
+                                      product: data.products[index],
+                                        // itemDescription: item.description,
+                                        // itemImage: [item.image],
+                                        // itemPrice: item.itemPrice,
+                                        // itemName: item.name,
+                                        // itemRating: item.ratingNumber,
+                                        // itemActualPrice: item.actualPrice,
+                                        // itemDiscount: item.discount
+                                        
+                                        )));
                           },
                           child: BottomCardView(
                               itemName: item.name,
                               discountPrice: item.discount,
                               itemDescription: item.description,
-                              itemImage: item.image,
+                              itemImage: item.image.isNotEmpty ? item.image[0] : '',
                               itemPrice: item.itemPrice,
                               actualPrice: item.actualPrice),
                         );
@@ -322,7 +337,7 @@ class _HomePageState extends State<HomePage> {
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
                           image: DecorationImage(
-                              image: AssetImage('assets/Mask Group.png'))),
+                              image: AssetImage('assets/Mask Group.png'),),),
                     ),
                   ),
                 ],

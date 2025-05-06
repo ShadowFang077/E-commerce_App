@@ -10,6 +10,17 @@ class Womens extends StatefulWidget {
 class _WomensState extends State<Womens> {
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Womens'),
+      ),
+      body: const Center(
+        child: Text('Present no womens products yet!',
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+            )),
+      ),
+    );
   }
 }
